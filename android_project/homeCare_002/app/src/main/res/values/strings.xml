@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Home Care</string>
+    <string name="i_want_to">I want to</string>
+    <string name="hire_a_caretaker">HIRE A CARETAKER</string>
+    <string name="offer_services">BE A CARETAKER</string>
+    <string name="please_select_what_you_want">Please select what you want</string>
+    <string name="logo">HomeCare</string>
+    <string-array name="gender">
+        <item>-- Gender --</item>
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+    <string-array name="Districts">
+        <item>-- District --</item>
+        <item>Colombo</item>
+        <item>Gampaha</item>
+        <item>Kalutara</item>
+        <item>Kandy</item>
+        <item>Matale</item>
+        <item>Nuwara Eliya</item>
+        <item>Galle</item>
+        <item>Matara</item>
+        <item>Hambantota</item>
+        <item>Jaffna</item>
+        <item>Kilinochchi</item>
+        <item>Mannar</item>
+        <item>Vavuniya</item>
+        <item>Mullaitivu</item>
+        <item>Batticaloa</item>
+        <item>Ampara</item>
+        <item>Trincomalee</item>
+        <item>Kurunegala</item>
+        <item>Puttalam</item>
+        <item>Anuradhapura</item>
+        <item>Polonnaruwa</item>
+        <item>Badulla</item>
+        <item>Moneragala</item>
+        <item>Ratnapura</item>
+        <item>Kegalle</item>
+    </string-array>
+</resources>
