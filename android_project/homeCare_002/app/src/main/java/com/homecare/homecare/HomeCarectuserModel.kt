@@ -4,5 +4,6 @@ data class HomeCarectuserModel (
     var userName: String? = null,
     var emialAddress: String? = null,
     var contactNumber: String? = null,
-    var nicNumber: String? = null
+    var nicNumber: String? = null,
+    var password: String? =  null
 )
