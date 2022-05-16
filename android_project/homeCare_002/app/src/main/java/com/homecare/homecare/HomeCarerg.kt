@@ -136,6 +136,7 @@ class HomeCarerg : AppCompatActivity() {
             pw1.error = "Your password not matched"
             pw2.error = "Your password not matched"
         } else{
+            //Create user account using firebase Custom(Email and password Authentication)
             auth.createUserWithEmailAndPassword(emailAddress, password1)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
@@ -143,13 +144,13 @@ class HomeCarerg : AppCompatActivity() {
                         Log.d(TAG, "createUserWithEmail:success")
                         val user = auth.currentUser
                         //Wtrite in database
-                        val caretakerID = nicNumber
+                        val caretakerID = user?.uid.toString()
 
                         //pass data to model
                         val caretaker = HomeCarectuserModel(userName,emailAddress,contactNumber,nicNumber,password1)
 
                         //pass data to firebase realtime database
-                        dref.child(caretakerID).setValue(caretaker)
+                        dref.child("userCARETAKER").child(caretakerID).setValue(caretaker)
                             .addOnSuccessListener {
                                 Toast.makeText(this,"Registered Successfully", Toast.LENGTH_LONG).show()
                                 openlg()
