@@ -7,10 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -33,10 +31,16 @@ class HomeCarerg : AppCompatActivity() {
     private lateinit var dob: EditText
     private lateinit var gender: Spinner
     private lateinit var district: Spinner
+    private lateinit var tos: Spinner
     private lateinit var pw1: TextInputEditText
     private lateinit var pw2: TextInputEditText
     private lateinit var btn_reg: Button
     private lateinit var btn_datepicker: Button
+
+    //defining variable
+    private lateinit var string_gender: String
+    private lateinit var string_district: String
+    private lateinit var string_tos: String
 
     //Firebase database reference
     private lateinit var dref: DatabaseReference
@@ -57,6 +61,7 @@ class HomeCarerg : AppCompatActivity() {
         dob = findViewById(R.id.editTextDob)
         gender = findViewById(R.id.spinnerGender)
         district = findViewById(R.id.spinnerDistrict)
+        tos = findViewById(R.id.spinnerrgtos)
         pw1 =  findViewById(R.id.editTextpassowrd)
         pw2 = findViewById(R.id.editTextCpassword)
         btn_reg = findViewById(R.id.btn_register)
@@ -64,6 +69,36 @@ class HomeCarerg : AppCompatActivity() {
 
         // Initialize Firebase Auth
         auth = Firebase.auth
+
+        tos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                string_tos = adapterView?.getItemAtPosition(position).toString()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                string_tos =""
+            }
+        }
+
+        district.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                string_district = adapterView?.getItemAtPosition(position).toString()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                string_district = ""
+            }
+        }
+
+        gender.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                string_gender = adapterView?.getItemAtPosition(position).toString()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                string_gender = ""
+            }
+        }
 
         //assigning calender into new instance
         var myCalender = Calendar.getInstance()
@@ -98,7 +133,7 @@ class HomeCarerg : AppCompatActivity() {
 
     //method for assigning date picker value into label
     private fun updatelabel(myCalender: Calendar) {
-        val myFormat = "dd-mm-yyyy"
+        val myFormat = "dd-MM-yyyy"
         val sdf = SimpleDateFormat(myFormat, Locale.UK)
         dob.setText(sdf.format(myCalender.time))
 
@@ -114,6 +149,7 @@ class HomeCarerg : AppCompatActivity() {
         val emailAddress = email.text.toString()
         val contactNumber = mobileNo.text.toString()
         val nicNumber = nic.text.toString()
+        val dateofbirth = dob.text.toString()
         val password1 = pw1.text.toString()
         val password2 =  pw2.text.toString()
 
@@ -128,6 +164,14 @@ class HomeCarerg : AppCompatActivity() {
             mobileNo.error = "Please enter mobile number"
         } else if(nicNumber.isEmpty()){
             nic.error = "Please enter National Identity number"
+        }else if(dateofbirth.isEmpty()){
+            dob.error = "Plese enter your date of birth"
+        }else if(string_district.equals("- District -")){
+            string_district=""
+        }else if (string_gender.equals("- Gender -")){
+            string_gender=""
+        }else if(string_tos.equals("- Select the type of your service -")){
+            string_tos=""
         }else if(password1.isEmpty()){
             pw1.error = "Please enter your Password here"
         } else if(password2.isEmpty()){
@@ -147,7 +191,11 @@ class HomeCarerg : AppCompatActivity() {
                         val caretakerID = user?.uid.toString()
 
                         //pass data to model
-                        val caretaker = HomeCarectuserModel(userName,emailAddress,contactNumber,nicNumber,password1)
+                        val caretaker = HomeCarectuserModel(userName,emailAddress,contactNumber,nicNumber,dateofbirth,string_gender,string_district,string_tos,password1,"0")
+
+                        dref.child("userCARETAKERCITY").child(string_district).child(caretakerID).setValue(caretakerID)
+
+                        dref.child("userCARETAKERTOS").child(string_tos).child(caretakerID).setValue(caretakerID)
 
                         //pass data to firebase realtime database
                         dref.child("userCARETAKER").child(caretakerID).setValue(caretaker)
@@ -173,4 +221,5 @@ class HomeCarerg : AppCompatActivity() {
         val intent = Intent(this,HomeCarelg::class.java)
         startActivity(intent)
     }
+
 }

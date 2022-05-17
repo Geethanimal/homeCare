@@ -5,5 +5,13 @@ data class HomeCarectuserModel (
     var emialAddress: String? = null,
     var contactNumber: String? = null,
     var nicNumber: String? = null,
-    var password: String? =  null
+    var dateofbirth: String? = null,
+    var gender: String? = null,
+    var district: String? = null,
+    var typeofservice: String? = null,
+    var password: String? =  null,
+    var published: String? = null,
+    var picupload: String? = null,
+    var description: String? = null
+
 )
