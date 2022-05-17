@@ -28,6 +28,7 @@ class HomeCaredashboardct : AppCompatActivity() {
             Firebase.auth.signOut()
             var intent = Intent(this,HomeCarelg::class.java)
             startActivity(intent)
+            finish()
         }
 
     }

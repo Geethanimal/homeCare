@@ -10,9 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HomeCare">
         <activity
-            android:name=".HomeCarectprofile"
+            android:name=".HomeCarecuFindct"
             android:exported="false"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"/>
+        <activity
+            android:name=".HomeCarectprofile"
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
         <activity
             android:name=".HomeCaredashboardct"
             android:exported="false" />

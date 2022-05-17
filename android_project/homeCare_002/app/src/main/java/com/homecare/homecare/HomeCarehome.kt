@@ -13,6 +13,12 @@ class HomeCarehome : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_carehome)
         val btn_offerservices = findViewById<Button>(R.id.btn_offerservices);
+        val btn_hireacaretaker = findViewById<Button>(R.id.btn_hireacaretaker)
+
+        btn_hireacaretaker.setOnClickListener{
+            val intent = Intent(this,HomeCarecuFindct::class.java)
+            startActivity(intent)
+        }
 
         btn_offerservices.setOnClickListener{
             val intent = Intent(this,HomeCarelg::class.java)
