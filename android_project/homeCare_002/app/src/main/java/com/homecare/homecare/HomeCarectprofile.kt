@@ -1,11 +1,13 @@
 package com.homecare.homecare
 
 import android.content.ContentValues.TAG
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.core.view.isEmpty
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -24,6 +26,8 @@ class HomeCarectprofile : AppCompatActivity() {
     private lateinit var ctprofile_district: Spinner
     private lateinit var ctprofile_tos: Spinner
     private lateinit var ctprofile_description: EditText
+    private lateinit var btn_ctprofile_cancel:Button
+    private lateinit var btn_ctprofile_update:Button
 
     private lateinit var userName: String
     private lateinit var contactNumber: String
@@ -34,8 +38,11 @@ class HomeCarectprofile : AppCompatActivity() {
     private lateinit var tos: String
     private lateinit var description: String
 
-    /*//Defining Firebase auth instance
-    private lateinit var auth: FirebaseAuth*/
+    //defining variable
+    private lateinit var string_gender: String
+    private lateinit var string_district: String
+    private lateinit var string_tos: String
+    private lateinit var uid: String
 
     //Defining Firebase realtime database instance
     private lateinit var database: DatabaseReference
@@ -54,12 +61,44 @@ class HomeCarectprofile : AppCompatActivity() {
         ctprofile_district = findViewById(R.id.ctprofile_district)
         ctprofile_tos = findViewById(R.id.ctprofile_tos)
         ctprofile_description = findViewById(R.id.ctprofile_description)
+        btn_ctprofile_cancel = findViewById(R.id.ctprofile_cancel)
+        btn_ctprofile_update = findViewById(R.id.ctprofile_update)
+
+        ctprofile_tos.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                string_tos = adapterView?.getItemAtPosition(position).toString()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                string_tos =""
+            }
+        }
+
+        ctprofile_district.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                string_district = adapterView?.getItemAtPosition(position).toString()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                string_district = ""
+            }
+        }
+
+        ctprofile_gender.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                string_gender = adapterView?.getItemAtPosition(position).toString()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                string_gender = ""
+            }
+        }
 
         //Assigning database reference to Firebase realtime database reference instance
         database = FirebaseDatabase.getInstance().getReference("HomeCare")
 
         //Assigning user id to uid
-        val uid = Firebase.auth.currentUser?.uid.toString()
+        uid = Firebase.auth.currentUser?.uid.toString()
 
         database.child("userCARETAKER").child(uid).get().addOnSuccessListener {
             Log.i("firebase", "Got value ${it.value}")
@@ -110,12 +149,20 @@ class HomeCarectprofile : AppCompatActivity() {
 
             }else if(state_published.equals("1")){
 
-                ctprofiletextview.text = "Your profile was published. You can update profile here"
+                ctprofiletextview.text = "Your profile was published."
 
             }
 
         }.addOnFailureListener{
             Log.e("firebase", "Error getting data", it)
+        }
+
+        btn_ctprofile_cancel.setOnClickListener{
+            cancelbtn()
+        }
+
+        btn_ctprofile_update.setOnClickListener{
+            updateprofile()
         }
 
     }
@@ -173,5 +220,57 @@ class HomeCarectprofile : AppCompatActivity() {
                 ctprofile_tos.setSelection(0)
             }
         }
+    }
+    private fun cancelbtn(){
+        ctprofile_username.setText("")
+        ctprofile_contactno.setText("")
+        ctprofile_nicno.setText("")
+        ctprofile_dob.setText("")
+        ctprofile_description.setText("")
+        var intent = Intent(this,HomeCaredashboardct::class.java)
+        startActivity(intent)
+    }
+    private fun updateprofile(){
+        //getting values
+        val userName = ctprofile_username.text.toString()
+        val contactNumber = ctprofile_contactno.text.toString()
+        val nicNumber = ctprofile_nicno.text.toString()
+        val dateofbirth = ctprofile_dob.text.toString()
+        val description = ctprofile_description.text.toString()
+        val gender = string_gender
+
+
+        if(description.isEmpty()){
+            ctprofile_description.error = "Describe about your proffessional skills"
+        }else if(userName.isEmpty()){
+            ctprofile_username.error = "Enter your User Name"
+        }else if(contactNumber.isEmpty()){
+            ctprofile_contactno.error = "Enter your contact number"
+        }else if(nicNumber.isEmpty()){
+            ctprofile_nicno.error = "Enter your National Identity number"
+        }else if(dateofbirth.isEmpty()){
+            ctprofile_dob.error = "Enter your Date of birth"
+        }
+
+        //pass data to model
+        val caretaker = HomeCarectuserModel(userName,contactNumber,nicNumber,dateofbirth,gender,"1","",description,string_district,string_tos)
+
+        database.child("userCARETAKERCITY").child(district).child(uid).removeValue()
+        database.child("userCARETAKERTOS").child(tos).child(uid).removeValue()
+
+        database.child("userCARETAKERCITY").child(string_district).child(uid).setValue(uid)
+        database.child("userCARETAKERTOS").child(string_tos).child(uid).setValue(uid)
+
+        //pass data to firebase realtime database
+        database.child("userCARETAKER").child(uid).setValue(caretaker)
+            .addOnSuccessListener {
+                Toast.makeText(this,"Registered Successfully", Toast.LENGTH_LONG).show()
+                cancelbtn()
+
+            }.addOnFailureListener{ err->
+                Toast.makeText(this,"Error ${err.message}", Toast.LENGTH_LONG).show()
+            }
+
+
     }
 }

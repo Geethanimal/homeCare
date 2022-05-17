@@ -176,7 +176,7 @@
             tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
 
         <Button
-            android:id="@+id/ctprofile_cencel"
+            android:id="@+id/ctprofile_cancel"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
@@ -201,7 +201,7 @@
             android:text="@string/update"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ctprofile_cencel"
+            app:layout_constraintStart_toEndOf="@+id/ctprofile_cancel"
             app:layout_constraintTop_toBottomOf="@+id/ctprofile_description" />
 
         <TextView

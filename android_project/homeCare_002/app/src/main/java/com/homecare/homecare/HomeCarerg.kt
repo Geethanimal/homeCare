@@ -191,7 +191,7 @@ class HomeCarerg : AppCompatActivity() {
                         val caretakerID = user?.uid.toString()
 
                         //pass data to model
-                        val caretaker = HomeCarectuserModel(userName,emailAddress,contactNumber,nicNumber,dateofbirth,string_gender,string_district,string_tos,password1,"0")
+                        val caretaker = HomeCarectuserModel(userName,contactNumber,nicNumber,dateofbirth,string_gender,"0","","",string_district,string_tos,password1,emailAddress)
 
                         dref.child("userCARETAKERCITY").child(string_district).child(caretakerID).setValue(caretakerID)
 
@@ -209,7 +209,7 @@ class HomeCarerg : AppCompatActivity() {
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                        Toast.makeText(baseContext, "Authentication failed.",
+                        Toast.makeText(baseContext, "This Email has already Registered. Use defferent mail",
                             Toast.LENGTH_SHORT).show()
                     }
                 }
